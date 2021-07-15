@@ -330,6 +330,7 @@ h1 {
   text-align: center;
   line-height: 40px;
   margin-bottom: 30px;
+  margin-top: 60px;
 }
 
 .cart {
@@ -508,8 +509,11 @@ h1 {
   .pizzaInfo--cancelButton {
     display: none;
   }
-
+  
   .pizzaInfo--cancelMobileButton {
-    display: block;
+    display: flex;
+    padding-top: 70px;
+    align-items: flex-start;
+    text-align: center;
   }
 }

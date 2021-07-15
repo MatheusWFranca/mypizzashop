@@ -7,7 +7,6 @@ const queryAll = (element) => {
 
 let quantity = 1;
 
-
 pizzaJson.map((item, index) => {
   let pizzaItem = query('.models .pizza-item').cloneNode(true);
 
@@ -19,8 +18,10 @@ pizzaJson.map((item, index) => {
   pizzaItem.querySelector('a').addEventListener('click', (event) => {
     event.preventDefault();
     quantity = 1;
-
-    const modal = query('.pizzaWindowArea');
+    const modal = queryAll('.pizzaWindowArea, .pizzaInfo--cancelMobileButton');
+    modal.forEach((item) => {
+      item.classList.add('active');
+    }) 
     const pizzaName = query('.pizzaInfo h1');
     const pizzaDescription = query('.pizzaInfo--desc');
     const pizzaImg = query('.pizzaBig img');
@@ -29,7 +30,7 @@ pizzaJson.map((item, index) => {
     const pizzaSelected = query('.pizzaInfo--size.selected');
     const pizzaQuantity = query('.pizzaInfo--qt');
 
-    modal.classList.add('active');
+    // modal.classList.add('active');
     pizzaName.innerHTML = item.name;
     pizzaDescription.innerHTML = item.description;
     pizzaImg.setAttribute('src', item.img);
@@ -44,6 +45,17 @@ pizzaJson.map((item, index) => {
     pizzaQuantity.innerHTML = quantity;
 
   });
-
   const pizzaArea = query('.pizza-area').append(pizzaItem);
 });
+
+function closeModal() {
+  const close = query('.pizzaWindowArea');
+  close.classList.remove('active');  
+}
+
+const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
+
+cancelButton.forEach((button) => {
+  button.addEventListener('click', closeModal);
+});
+
