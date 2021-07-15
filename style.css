@@ -313,6 +313,7 @@ h1 {
   display: inline-block;
   cursor: pointer;
   margin-right: 30px;
+  transition: .9s;
 }
 
 .pizzaInfo--addButton:hover {
@@ -322,6 +323,15 @@ h1 {
 .pizzaInfo--cancelButton {
   display: inline-block;
   cursor: pointer;
+  padding: 20px 30px;
+  border-radius: 20px;
+  background-color: red;
+  color: #fff;
+  transition: .9s;
+}
+
+.pizzaInfo--cancelButton:hover { 
+  filter: brightness(87%);
 }
 
 .pizzaInfo--cancelMobileButton {
@@ -419,7 +429,7 @@ h1 {
   }
 }
 
-@media (max-width:840px) {
+@media (max-width: 840px) {
   body {
     flex-direction: column;
   }
@@ -483,6 +493,7 @@ h1 {
 
   .pizzaInfo h1 {
     margin-top: 20px;
+    text-align: center;
   }
 
   .pizzaInfo--qtarea {
@@ -509,11 +520,17 @@ h1 {
   .pizzaInfo--cancelButton {
     display: none;
   }
-  
+
   .pizzaInfo--cancelMobileButton {
     display: flex;
     padding-top: 70px;
-    align-items: flex-start;
-    text-align: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .pizzaInfo--cancelMobileButton {
+    padding-top: 170px;
   }
 }
