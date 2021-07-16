@@ -4,6 +4,8 @@ const query = (element) => {
 const queryAll = (element) => {
   return document.querySelectorAll(element);
 }
+let quantity = 1;
+let pizzaIndex = 0;
 
 const pizzaQuantity = query('.pizzaInfo--qt');
 const pizzaName = query('.pizzaInfo h1');
@@ -13,8 +15,9 @@ const pizzaPrice = query('.pizzaInfo--actualPrice');
 const pizzaSize = queryAll('.pizzaInfo--size');
 const pizzaSelected = query('.pizzaInfo--size.selected');
 const close = query('.pizzaWindowArea');
+const addButton = query('.pizzaInfo--addButton');
+const cart = [];
 
-let quantity = 1;
 
 pizzaJson.map((item, index) => {
   let pizzaItem = query('.models .pizza-item').cloneNode(true);
@@ -27,12 +30,12 @@ pizzaJson.map((item, index) => {
   pizzaItem.querySelector('a').addEventListener('click', (event) => {
     event.preventDefault();
     quantity = 1;
+    pizzaIndex = index;
+
     const modal = queryAll('.pizzaWindowArea, .pizzaInfo--cancelMobileButton');
     modal.forEach((item) => {
       item.classList.add('active');
     }) 
-
-    // modal.classList.add('active');
     pizzaName.innerHTML = item.name;
     pizzaDescription.innerHTML = item.description;
     pizzaImg.setAttribute('src', item.img);
@@ -42,7 +45,6 @@ pizzaJson.map((item, index) => {
         size.classList.add('selected');
       }
       size.querySelector('span').innerHTML = pizzaJson[index].sizes[sizeIndex];
-      console.log(size)
     });
   });
   const pizzaArea = query('.pizza-area').append(pizzaItem);
@@ -83,5 +85,13 @@ pizzaSize.forEach((size, sizeIndex) => {
   });
 });
 
-
+addButton.addEventListener('click', () => {
+  // Qual pizza?
+  console.log(`Pizza: ${pizzaIndex}`);
+  // Qual tamanho ?
+  let size = query('.pizzaInfo--size.selected').getAttribute('data-key');
+  console.log(`Tamanho: ${size}`);
+  // Qual a quantidade?
+  console.log(`Quantidade: ${quantity}`);
+})
 
