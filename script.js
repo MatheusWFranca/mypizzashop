@@ -16,6 +16,7 @@ const pizzaSize = queryAll('.pizzaInfo--size');
 const pizzaSelected = query('.pizzaInfo--size.selected');
 const close = query('.pizzaWindowArea');
 const addButton = query('.pizzaInfo--addButton');
+const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
 const cart = [];
 
 
@@ -35,7 +36,7 @@ pizzaJson.map((item, index) => {
     const modal = queryAll('.pizzaWindowArea, .pizzaInfo--cancelMobileButton');
     modal.forEach((item) => {
       item.classList.add('active');
-    }) 
+    })
     pizzaName.innerHTML = item.name;
     pizzaDescription.innerHTML = item.description;
     pizzaImg.setAttribute('src', item.img);
@@ -53,12 +54,13 @@ pizzaJson.map((item, index) => {
 
 // Fechar modal
 
-const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
+
+function closeModal() {
+  close.classList.remove('active');
+}
 
 cancelButton.forEach((button) => {
-  button.addEventListener('click', () => {
-    close.classList.remove('active');  
-  });
+  button.addEventListener('click', closeModal)
 });
 
 // Adicionar e retirar quantidade
@@ -67,7 +69,7 @@ const removePizza = query('.pizzaInfo--qtmenos');
 const addPizza = query('.pizzaInfo--qtmais');
 
 removePizza.addEventListener('click', () => {
-  if(quantity > 1 ) {
+  if (quantity > 1) {
     quantity--;
     pizzaQuantity.innerHTML = quantity;
   }
@@ -78,7 +80,7 @@ addPizza.addEventListener('click', () => {
   pizzaQuantity.innerHTML = quantity;
 });
 
-pizzaSize.forEach((size, sizeIndex) => {
+pizzaSize.forEach((size) => {
   size.addEventListener('click', (event) => {
     query('.pizzaInfo--size.selected').classList.remove('selected');
     event.currentTarget.classList.add('selected');
@@ -86,12 +88,22 @@ pizzaSize.forEach((size, sizeIndex) => {
 });
 
 addButton.addEventListener('click', () => {
-  // Qual pizza?
-  console.log(`Pizza: ${pizzaIndex}`);
-  // Qual tamanho ?
-  let size = query('.pizzaInfo--size.selected').getAttribute('data-key');
-  console.log(`Tamanho: ${size}`);
-  // Qual a quantidade?
-  console.log(`Quantidade: ${quantity}`);
-})
+  let size = +query('.pizzaInfo--size.selected').getAttribute('data-key');
+  let identifier = `${pizzaJson[pizzaIndex].id}${size}`
+  let index = cart.findIndex((item) => {
+    return item.identifier === identifier;
+  });
 
+  if (index > -1) {
+    cart[index].qtd += quantity;
+  } else {
+    cart.push({
+      identifier: identifier,
+      id: pizzaJson[pizzaIndex].id,
+      size: size,
+      qtd: quantity,
+    });
+  }
+  console.log(cart)
+  closeModal();
+});
