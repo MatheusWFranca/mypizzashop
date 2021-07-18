@@ -17,6 +17,7 @@ const pizzaSelected = query('.pizzaInfo--size.selected');
 const close = query('.pizzaWindowArea');
 const addButton = query('.pizzaInfo--addButton');
 const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
+const aside = query('aside');
 const cart = [];
 
 
@@ -93,7 +94,6 @@ addButton.addEventListener('click', () => {
   let index = cart.findIndex((item) => {
     return item.identifier === identifier;
   });
-
   if (index > -1) {
     cart[index].qtd += quantity;
   } else {
@@ -103,7 +103,22 @@ addButton.addEventListener('click', () => {
       size: size,
       qtd: quantity,
     });
-  }
-  console.log(cart)
+  };
+  updateCart();
   closeModal();
 });
+
+function updateCart() {
+  if(cart.length > 0) {
+    aside.classList.add('show');
+    for(let i in cart) {
+      let pizzaItem = pizzaJson.find((item) => {
+        return item.id == cart[i].id;
+      })
+    }
+  } else {
+    aside.classList.remove('show');
+  }
+}
+
+
