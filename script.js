@@ -1,9 +1,10 @@
 const query = (element) => {
   return document.querySelector(element);
-}
+};
 const queryAll = (element) => {
   return document.querySelectorAll(element);
-}
+};
+
 let quantity = 1;
 let pizzaIndex = 0;
 
@@ -14,9 +15,7 @@ const pizzaImg = query('.pizzaBig img');
 const pizzaPrice = query('.pizzaInfo--actualPrice');
 const pizzaSize = queryAll('.pizzaInfo--size');
 const pizzaSelected = query('.pizzaInfo--size.selected');
-const close = query('.pizzaWindowArea');
 const addButton = query('.pizzaInfo--addButton');
-const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
 const aside = query('aside');
 const cartArea = query('.cart');
 const cart = [];
@@ -54,63 +53,91 @@ pizzaJson.map((item, index) => {
 
 });
 
-// Fechar modal
-
-
 function closeModal() {
-  close.classList.remove('active');
-}
+  const cancelButton = queryAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton');
+  const close = query('.pizzaWindowArea');
 
-cancelButton.forEach((button) => {
-  button.addEventListener('click', closeModal)
-});
-
-// Adicionar e retirar quantidade
-
-const removePizza = query('.pizzaInfo--qtmenos');
-const addPizza = query('.pizzaInfo--qtmais');
-
-removePizza.addEventListener('click', () => {
-  if (quantity > 1) {
-    quantity--;
-    pizzaQuantity.innerHTML = quantity;
+  function toClose() {
+    close.classList.remove('active');
   }
-});
 
-addPizza.addEventListener('click', () => {
-  quantity++;
-  pizzaQuantity.innerHTML = quantity;
-});
-
-pizzaSize.forEach((size) => {
-  size.addEventListener('click', (event) => {
-    query('.pizzaInfo--size.selected').classList.remove('selected');
-    event.currentTarget.classList.add('selected');
+  cancelButton.forEach((button) => {
+    button.addEventListener('click', toClose);
   });
-});
 
-addButton.addEventListener('click', () => {
-  let size = +query('.pizzaInfo--size.selected').getAttribute('data-key');
-  let identifier = `${pizzaJson[pizzaIndex].id}${size}`
-  let index = cart.findIndex((item) => {
-    return item.identifier === identifier;
+  addButton.addEventListener('click', toClose);
+
+};
+closeModal();
+
+function changeQtd() {
+  const removePizza = query('.pizzaInfo--qtmenos');
+  const addPizza = query('.pizzaInfo--qtmais');
+
+  removePizza.addEventListener('click', () => {
+    if (quantity > 1) {
+      quantity--;
+      pizzaQuantity.innerHTML = quantity;
+    }
   });
-  if (index > -1) {
-    cart[index].qtd += quantity;
-  } else {
-    cart.push({
-      identifier: identifier,
-      id: pizzaJson[pizzaIndex].id,
-      size: size,
-      qtd: quantity,
+
+  addPizza.addEventListener('click', () => {
+    quantity++;
+    pizzaQuantity.innerHTML = quantity;
+  });
+
+  pizzaSize.forEach((size) => {
+    size.addEventListener('click', (event) => {
+      query('.pizzaInfo--size.selected').classList.remove('selected');
+      event.currentTarget.classList.add('selected');
     });
-  };
-  updateCart();
-  closeModal();
-});
+  });
+}
+changeQtd();
+
+function Mobile() {
+  const menuMobile = query('.menu-openner');
+  const menuCloser = query('.menu-closer');
+
+  menuMobile.addEventListener('click', () => {
+    if (cart.length > 0) {
+      aside.classList.add('mobile');
+    }
+  });
+
+  menuCloser.addEventListener('click', () => {
+    aside.classList.remove('mobile');
+  })
+}
+Mobile();
+
+function handlePizza() {
+  addButton.addEventListener('click', () => {
+    let size = +query('.pizzaInfo--size.selected').getAttribute('data-key');
+    let identifier = `${pizzaJson[pizzaIndex].id}${size}`
+    let index = cart.findIndex((item) => {
+      return item.identifier === identifier;
+    });
+    if (index > -1) {
+      cart[index].qtd += quantity;
+    } else {
+      cart.push({
+        identifier: identifier,
+        id: pizzaJson[pizzaIndex].id,
+        size: size,
+        qtd: quantity,
+      });
+    };
+    updateCart();
+    closeModal();
+  });
+}
+handlePizza();
 
 function updateCart() {
-  if(cart.length > 0) {
+  const menuOpener = query('.menu-openner sup').innerHTML = cart.length;;
+
+  if (cart.length > 0) {
     aside.classList.add('show');
     cartArea.innerHTML = '';
 
@@ -118,16 +145,18 @@ function updateCart() {
     let desconto = 0;
     let total = 0;
 
-    for(let i in cart) {
-      let pizzaItem = pizzaJson.find((item) => { return item.id == cart[i].id; })
-      
+    for (let i in cart) {
+      let pizzaItem = pizzaJson.find((item) => {
+        return item.id == cart[i].id;
+      })
+
       subtotal += pizzaItem.price * cart[i].qtd;
 
       const cartItem = query('.models .cart--item').cloneNode(true);
       let pizzaSize = cart[i].size;
-      if(cart[i].size == 0) {
+      if (cart[i].size == 0) {
         pizzaSize = '(P)'
-      } else if(cart[i].size == 1) {
+      } else if (cart[i].size == 1) {
         pizzaSize = '(M)'
       } else {
         pizzaSize = '(G)'
@@ -136,7 +165,7 @@ function updateCart() {
       cartItem.querySelector('.cart--item-nome').innerHTML = `${pizzaItem.name} ${pizzaSize}`;
       cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qtd;
       cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', () => {
-        if(cart[i].qtd > 1) {
+        if (cart[i].qtd > 1) {
           cart[i].qtd--;
         } else {
           cart.splice(i, 1); // diminuir quantidade até remover do carrinho
@@ -159,6 +188,6 @@ function updateCart() {
 
   } else {
     aside.classList.remove('show');
+    aside.classList.remove('mobile');
   }
 }
-

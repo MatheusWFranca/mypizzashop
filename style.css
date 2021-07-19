@@ -28,15 +28,19 @@ header {
 }
 
 .menu-openner {
+  display: flex;
+  align-items: center;
   margin-right: 15px;
   font-size: 26px;
-  background-color: #a9dcff;
-  padding: 5px 20px;
+  background-color: #fff;
+  padding: 10px 30px;
   border-radius: 5px;
 }
 
-.menu-openner span {
+.menu-openner sup {
   margin-right: 10px;
+  color: #111;
+  font-size: 16px;
 }
 
 .menu-closer {
@@ -424,6 +428,9 @@ h1 {
 }
 
 @media (max-width:1000px) {
+  .mobile {
+    left: 0;
+  }
   .pizza-area {
     grid-template-columns: repeat(2, 1fr);
   }
