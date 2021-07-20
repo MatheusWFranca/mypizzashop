@@ -531,14 +531,18 @@ h1 {
 
   .pizzaInfo--cancelMobileButton {
     display: flex;
-    padding-top: 70px;
+    padding-top: 30%;
     align-items: center;
     justify-content: flex-start;
   }
+  
+  .pizzaInfo--cancelMobileButton img {
+    padding-top: 20px;
+  }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 350px) {
   .pizzaInfo--cancelMobileButton {
-    padding-top: 170px;
+    padding-top: 20%;
   }
 }
